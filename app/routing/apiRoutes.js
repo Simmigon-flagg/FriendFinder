@@ -1,63 +1,68 @@
-// ===============================================================================
-// LOAD DATA
-// We are linking our routes to a series of "data" sources.
-// These data sources hold arrays of information on table-data, waitinglist, etc.
-// ===============================================================================
+var friends = require("../data/friends");
 
-var tableData = require("../data/tableData");
-var waitListData = require("../data/waitinglistData");
+module.exports = function (app) {
 
 
-// ===============================================================================
-// ROUTING
-// ===============================================================================
+  //Select all friends
+  app.get("/api/friends", function (req, res) {
 
-module.exports = function(app) {
-  // API GET Requests
-  // Below code handles when users "visit" a page.
-  // In each of the below cases when a user visits a link
-  // (ex: localhost:PORT/api/admin... they are shown a JSON of the data in the table)
-  // ---------------------------------------------------------------------------
+    res.json(friends);
 
-  app.get("/api/friends", function(req, res) {
-    res.json(tableData);
   });
+  //
+  app.post("/api/friends", function (req, res) {
+    var score = req.body.scores;
+    var minTotalDifference = 51;
+    var newFriendsum = 0;
 
-//   app.get("/api/waitlist", function(req, res) {
-//     res.json(waitListData);
-//   });
+    for (var i = 0; i < score.length; i++) {
+      var s = parseInt(score[i]);
+      newFriendsum = add(newFriendsum, s);
+    }
+    // console.log(`New Friend Sum ${newFriendsum}`);
+    // console.log(typeof (newFriendsum));
 
-  // API POST Requests
-  // Below code handles when a user submits a form and thus submits data to the server.
-  // In each of the below cases, when a user submits form data (a JSON object)
-  // ...the JSON is pushed to the appropriate JavaScript array
-  // (ex. User fills out a reservation request... this data is then sent to the server...
-  // Then the server saves the data to the tableData array)
-  // ---------------------------------------------------------------------------
+    var trackFriend = -1;
+    for (var i = 0; i < friends.length; i++) {
+      // var friendreducer = friends[i].scores.reduce(add, 0);
+      var eachFriendsScore = 0;
 
-  app.post("/api/friends", function(req, res) {
-    // Note the code here. Our "server" will respond to requests and let users know if they have a table or not.
-    // It will do this by sending out the value "true" have a table
-    // req.body is available since we're using the body-parser middleware
-    if (tableData.length < 5) {
-      tableData.push(req.body);
+      console.log(`Hi ${friends[i].name}, Are we friends?`)
+
+      for (var j = 0; j < friends[i].scores.length; j++) {
+        var s = parseInt(friends[i].scores[j]);
+        eachFriendsScore = add(eachFriendsScore, s);
+
+        var abstemp = eachFriendsScore - newFriendsum;
+        abstemp = Math.abs(abstemp);
+
+      }
+      console.log(`Each friend score ${eachFriendsScore} new friend score ${newFriendsum}`)
+
+      if (abstemp < minTotalDifference) {
+        minTotalDifference = abstemp;
+        trackFriend = i;
+
+      }
+      console.log(`My friend is ${friends[trackFriend].name}`);
+      console.log("\n");
+    }
+
+    // console.log(`${req.body.name}'s new friend is ${friends[trackFriend].name}. With a score differernce of ${minTotalDifference}`);
+    // console.log(`Send data for friend ${friends[trackFriend].photo}`);
+
+
+      friends.push(req.body);
       res.json(true);
-    }
-    else {
-      waitListData.push(req.body);
-      res.json(false);
-    }
+      return friends[trackFriend];
+
   });
 
-  // ---------------------------------------------------------------------------
-  // I added this below code so you could clear out the table while working with the functionality.
-  // Don"t worry about it!
-
-//   app.post("/api/clear", function() {
-//     // Empty out the arrays of data
-//     tableData = [];
-//     waitListData = [];
-
-//     console.log(tableData);
-//   });
 };
+
+
+
+function add(a, b) {
+  return a + b;
+
+}

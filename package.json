@@ -1,7 +1,7 @@
 {
   "name": "FriendFinder",
   "version": "1.0.0",
-  "description": "",
+  "description": "Source and some code used from https://gt.bootcampcontent.com/GT-Coding-Boot-Camp/GTATL201806FSF-Enterprise-GEDigital/tree/master/Class-Content/13-express/01-Activities/16-HotRestaurant/Solved",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/Simmigon-flagg/FriendFinder/issues"
   },
-  "homepage": "https://github.com/Simmigon-flagg/FriendFinder#readme"
+  "homepage": "https://github.com/Simmigon-flagg/FriendFinder#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "path": "^0.12.7"
+  }
 }
