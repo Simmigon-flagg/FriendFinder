@@ -46,7 +46,7 @@ var friends = [
 
   {
     "name": "Steve Rogers",
-    "photo": "https://goo.gl/images/hWGBhh",
+    "photo": "https://media0.giphy.com/media/1lk1IcVgqPLkA/200_s.gif",
     "scores": [
       1,
       1,
